@@ -75,7 +75,7 @@ dane do pseudo-losowego dostêpu do pliku.
 # TODO: 
 # - patch needed instead of use -DUID_NOBODY=`id -u nobody`
 #
-CFLAGS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -DUID_NOBODY=`id -u nobody`"
+CFLAGS="%{rpmcflags} -DUID_NOBODY=`id -u nobody`"
 export CFLAGS
 %configure \
 	--with-local-zlib=no
