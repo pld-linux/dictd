@@ -1,12 +1,12 @@
 Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
-Version:	1.9.10
-Release:	2
+Version:	1.9.11
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/sourceforge/dict/%{name}-%{version}.tar.gz
-# Source0-md5:	b758357235b1205e34ef74b809bd25b3
+# Source0-md5:	4d06aabf573c862fd29e409984f71a67
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-no_libnsl.patch
@@ -92,7 +92,7 @@ dane do pseudo-swobodnego dostêpu do pliku.
 
 %prep
 %setup -q
-%patch0 -p1
+#%patch0 -p1
 %patch1 -p1
 
 %build
@@ -153,7 +153,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCE ChangeLog README* TODO dictd.conf example* security.txt
+%doc ANNOUNCE NEWS README* TODO dictd.conf example* security.txt
 %ghost %{_sysconfdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/%{name}/%{name}-main.conf
