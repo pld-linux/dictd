@@ -1,7 +1,0 @@
-# sysconfig for dictd
-
-# Define nice level for dictd 
-SERVICE_RUN_NICE_LEVEL="+0"
-
-# Cmdline options (see dictd(8))
-DICTD_OPTS="--syslog --limit 5"
