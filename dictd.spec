@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.5.5
-Release:	3
+Release:	4
 License:	GPL
 Group:		Daemons
 Group(de):	Server
@@ -11,10 +11,14 @@ Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-no_libnsl.patch
+Patch1:		%{name}-system-zlib.patch
+Patch2:		%{name}-opt.patch
 URL:		http://www.dict.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flex
+BuildRequires:	bison
+BuildRequires:	zlib-devel
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -72,16 +76,15 @@ dane do pseudo-swobodnego dostêpu do pliku.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
-# --without-local-zlib option gives no effect. Usage of zlib from dictd tarball 
-# is hardcoded in configure. 
-# 
 aclocal
 autoconf
 (cd libmaa; aclocal; autoconf)
-%configure \
-	--with-local-zlib=no
+%configure
+
 %{__make}
 
 %install
@@ -89,18 +92,18 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_bindir},%{_sbindir}} \
 	   $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_mandir}/man{1,8}}
 
-install dict dictzip $RPM_BUILD_ROOT/%{_bindir}
-install {dict,dictzip}.1 $RPM_BUILD_ROOT/%{_mandir}/man1
+install dict dictzip $RPM_BUILD_ROOT%{_bindir}
+install {dict,dictzip}.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
-install %{name} $RPM_BUILD_ROOT/%{_sbindir}
-install %{name}.8 $RPM_BUILD_ROOT/%{_mandir}/man8
+install %{name} $RPM_BUILD_ROOT%{_sbindir}
+install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 echo "server localhost" > dict.conf
 echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > %{name}-main.conf 
 
 install dict.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install dictd-main.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-touch %{buildroot}%{_sysconfdir}/%{name}.conf
+touch $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
@@ -112,7 +115,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsystem/%{name} ]; then
+if [ -f /var/lock/subsys/%{name} ]; then
         /etc/rc.d/init.d/%{name} restart >&2
 else
         echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
