@@ -1,0 +1,13 @@
+--- dictd-1.5.5/configure.in~	Wed Nov  7 16:08:49 2001
++++ dictd-1.5.5/configure.in	Wed Nov  7 16:09:00 2001
+@@ -224,7 +224,9 @@
+ fi
+ 
+ AC_CHECK_LIB(socket,main,REALLIBS="$REALLIBS -lsocket")
+-AC_CHECK_LIB(nsl,main,REALLIBS="$REALLIBS -lnsl")
++AC_CHECK_FUNC(gethostbyname, [],
++	AC_CHECK_LIB(nsl, gethostbyname, REALLIBS="$REALLIBS -lnsl")
++)
+ 
+ if test "$local_dmalloc" = 0 -a "$needs_dmalloc" = 1; then
+     AC_CHECK_LIB(dmalloc,main,
