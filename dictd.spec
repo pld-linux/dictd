@@ -1,7 +1,7 @@
 Summary:	Dictionary database server
 Name:		dictd
 Version:	1.5.0
-Release:	2
+Release:	3
 License:	GPL
 Group:		Daemons
 Group(pl):	Serwery
@@ -9,6 +9,8 @@ URL:		http://www.dict.org/
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Requires:	/bin/cat
+Requires:	/bin/ls
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description 
@@ -70,8 +72,10 @@ install dictd.8.gz $RPM_BUILD_ROOT/%{_mandir}/man8
 
 echo "server localhost" > dict.conf
 echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > dictd.conf 
+install dict.conf dictd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 
-install dict.conf dictd.conf $RPM_BUILD_ROOT%{_sysconfdir}/
+mkdir $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+install %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}-main.conf
 touch %{buildroot}%{_sysconfdir}/%{name}.conf
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
@@ -85,7 +89,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-
 if [ -f /var/lock/subsystem/%{name} ]; then
         /etc/rc.d/init.d/%{name} restart >&2
 else
@@ -100,10 +103,12 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
+%attr(750,root,root) %dir %{_sysconfdir}/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/%{name}-main.conf
+%attr(640,root,root) %verify(not size mtime md5) %{_sysconfdir}/%{name}.conf
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
-%attr(755,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_datadir}/dictd
 %{_mandir}/man8/%{name}*
 %doc {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}.gz
