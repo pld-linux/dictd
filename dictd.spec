@@ -20,7 +20,7 @@ BuildRequires:	zlib-devel
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%description 
+%description
 Server for the Dictionary Server Protocol (DICT), a TCP transaction
 based query/response protocol that allows a client to access
 dictionary definitions from a set of natural language dictionary
@@ -94,7 +94,7 @@ install %{name} $RPM_BUILD_ROOT%{_sbindir}
 install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 echo "server localhost" > dict.conf
-echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > %{name}-main.conf 
+echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > %{name}-main.conf
 
 install dict.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install dictd-main.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
@@ -115,7 +115,7 @@ if [ -f /var/lock/subsys/%{name} ]; then
 else
         echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
 fi
-    
+
 %preun
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/%{name} ]; then
