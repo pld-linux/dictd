@@ -15,7 +15,8 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	libltdl-devel
+# to check: judy plugin (BR: judy-devel)
+BuildRequires:	libdbi-devel
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -32,6 +33,30 @@ databases.
 Serwer dla Dictionary Server Protocol (DICT), bazuj±cego na TCP
 protoko³u zapytañ i odpowiedzi umo¿liwiaj±cego klientom na dostêp do
 definicji s³ownikowych z zestawu baz danych.
+
+%package devel
+Summary:	Package for dictd plugins development
+Summary(pl):	Pakiet programistyczny do tworzenia wtyczek dictd
+Group:		Development/Libraries
+# doesn't require base
+
+%description devel
+Package for dictd plugins development.
+
+%description devel -l pl
+Pakiet programistyczny do tworzenia wtyczek dictd.
+
+%package plugin-dbi
+Summary:	DBI plygin for dictd server
+Summary(pl):	Wtyczka DBI dla serwera dictd
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-dbi
+DBI plygin for dictd server.
+
+%description plugin-dbi -l pl
+Wtyczka DBI dla serwera dictd.
 
 %package -n dict
 Summary:	DICT Protocol Client
@@ -155,9 +180,14 @@ fi
 %dir %{_datadir}/%{name}
 %{_mandir}/man8/%{name}*
 
-# where?
+%files devel
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dictdplugin-config
-#%{_includedir}/dictdplugin.h
+%{_includedir}/dictdplugin.h
+
+%files plugin-dbi
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/dictdplugin_dbi.so
 
 %files -n dict
 %defattr(644,root,root,755)
