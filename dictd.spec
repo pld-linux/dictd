@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.5.5
-Release:	4
+Release:	5
 License:	GPL
 Group:		Daemons
 Group(de):	Server
@@ -83,6 +83,7 @@ dane do pseudo-swobodnego dostêpu do pliku.
 aclocal
 autoconf
 (cd libmaa; aclocal; autoconf)
+CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
 %configure
 
 %{__make}
