@@ -17,6 +17,7 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	judy-devel
 BuildRequires:	libdbi-devel
+BuildRequires:	perl-base
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -133,11 +134,11 @@ dane do pseudo-swobodnego dostêpu do pliku.
 %{__perl} -pi -e 's/test \$\(PLUGINS\)/test "\$\(PLUGINS\)"/' Makefile.in
 
 %build
-cp -f %{_datadir}/automake/config.* .
+cp -f /usr/share/automake/config.* .
 %{__aclocal}
 %{__autoconf}
 cd libmaa
-cp -f %{_datadir}/automake/config.* .
+cp -f /usr/share/automake/config.* .
 %{__aclocal}
 %{__autoconf}
 cd ..
