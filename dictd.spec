@@ -75,7 +75,7 @@ dane do pseudo-swobodnego dostêpu do pliku.
 
 %build
 aclocal
-autoconf
+%{__autoconf}
 (cd libmaa; aclocal; autoconf)
 CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
 %configure
