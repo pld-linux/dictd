@@ -1,7 +1,7 @@
 diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
 --- dictd-1.5.5.orig/configure.in	Sat Nov 17 20:19:56 2001
 +++ dictd-1.5.5/configure.in	Sat Nov 17 20:20:57 2001
-@@ -42,21 +42,12 @@
+@@ -42,23 +42,14 @@
  echo Configuring for dict
  echo .
  
@@ -15,6 +15,8 @@ diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
 -
  AC_CANONICAL_HOST
  AC_PROG_CC
+ dnl AC_PROG_CXX
+
  AC_ISC_POSIX
  
  REALCC="$CC"
@@ -45,7 +47,7 @@ diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
 diff -Nur dictd-1.5.5.orig/libmaa/configure.in dictd-1.5.5/libmaa/configure.in
 --- dictd-1.5.5.orig/libmaa/configure.in	Mon Jul  6 00:14:34 1998
 +++ dictd-1.5.5/libmaa/configure.in	Sat Nov 17 20:21:30 2001
-@@ -43,24 +43,13 @@
+@@ -43,25 +43,14 @@
  echo Configuring for libmaa $MAA_MAJOR.$MAA_MINOR
  echo .
  
@@ -58,6 +60,7 @@ diff -Nur dictd-1.5.5.orig/libmaa/configure.in dictd-1.5.5/libmaa/configure.in
 -])
 -
  AC_CANONICAL_HOST
+ AC_PROG_AWK
  AC_PROG_CC
  AC_ISC_POSIX
  
