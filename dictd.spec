@@ -2,10 +2,10 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.9.11
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
-Source0:	http://dl.sourceforge.net/sourceforge/dict/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/dict/%{name}-%{version}.tar.gz
 # Source0-md5:	4d06aabf573c862fd29e409984f71a67
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -53,7 +53,6 @@ Summary:	dictfmt utility to convert databases in various formats into dict forma
 Summary(pl):	Narzêdzie dictfmt do konwersji baz w ró¿nych formatach na format dict
 Group:		Applications/Text
 Obsoletes:	dict-fmt
-Obsoletes:	dictfmt
 
 %description -n dictfmt
 dictfmt utility is designed to convert databases in various formats
