@@ -36,7 +36,7 @@ generate_dictdconf() {
 . /etc/sysconfig/network
 
 if is_no "${NETWORKING}"; then
-	msg_Network_Down ${DAEMON_FILE}
+	msg_network_down ${DAEMON_FILE}
         exit 1
 fi
 
@@ -59,7 +59,7 @@ case "$1" in
 		    exit 1
 		fi    
 	else
-		msg_Already_Running ${DAEMON_NAME}
+		msg_already_running ${DAEMON_NAME}
 		exit 1
 	fi
         ;;
@@ -70,7 +70,7 @@ case "$1" in
 		killproc /usr/sbin/${DAEMON_FILE} 
 		rm -f /var/lock/subsys/${DAEMON_FILE} >/dev/null 2>&1
 	else
-		msg_Not_Running ${DAEMON_NAME}
+		msg_not_running ${DAEMON_NAME}
 		exit 1
 	fi	
 	;;
@@ -82,7 +82,7 @@ case "$1" in
         $0 start
         ;;
     *)
-	msg_Usage "$0 {start|stop|status|restart|reload}"
+	msg_usage "$0 {start|stop|status|restart|reload}"
 	exit 1
 	;;
 esac
