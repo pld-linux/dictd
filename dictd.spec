@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.5.5
-Release:	2
+Release:	3
 License:	GPL
 Group:		Daemons
 Group(de):	Server
@@ -11,6 +11,8 @@ Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://www.dict.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 Requires:	/bin/cat
 Requires:	/bin/ls
 Prereq:		/sbin/chkconfig
