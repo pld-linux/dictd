@@ -9,8 +9,7 @@ Source0:	http://dl.sourceforge.net/sourceforge/dict/%{name}-%{version}.tar.gz
 # Source0-md5:	4d06aabf573c862fd29e409984f71a67
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-opt.patch
+Patch0:		%{name}-opt.patch
 URL:		http://www.dict.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -92,8 +91,7 @@ dane do pseudo-swobodnego dostêpu do pliku.
 
 %prep
 %setup -q
-#%patch0 -p1
-%patch1 -p1
+%patch0 -p1
 
 %build
 cp -f %{_datadir}/automake/config.* .
@@ -111,15 +109,10 @@ CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_bindir},%{_sbindir}} \
-		$RPM_BUILD_ROOT{%{_datadir}/%{name},%{_mandir}/man{1,8}}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_datadir}/%{name}}
 
-install dict dictzip dictfmt{,_{index2suffix,index2word,plugin,virtual}} \
-	dictunformat $RPM_BUILD_ROOT%{_bindir}
-install dict*.1 $RPM_BUILD_ROOT%{_mandir}/man1
-
-install %{name} $RPM_BUILD_ROOT%{_sbindir}
-install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 echo "server localhost" > dict.conf
 echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > %{name}-main.conf
@@ -163,11 +156,19 @@ fi
 %dir %{_datadir}/%{name}
 %{_mandir}/man8/%{name}*
 
+# where?
+%attr(755,root,root) %{_bindir}/dictdplugin-config
+#%{_includedir}/dictdplugin.h
+
 %files -n dict
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dict.conf
+%attr(755,root,root) %{_bindir}/colorit
 %attr(755,root,root) %{_bindir}/dict
+%attr(755,root,root) %{_bindir}/dictl
+%{_mandir}/man1/colorit.1*
 %{_mandir}/man1/dict.1*
+%{_mandir}/man1/dictl.1*
 
 %files -n dictfmt
 %defattr(644,root,root,755)
