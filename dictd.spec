@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.9.13
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/dict/%{name}-%{version}.tar.gz
@@ -15,7 +15,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
-# to check: judy plugin (BR: judy-devel)
+BuildRequires:	judy-devel
 BuildRequires:	libdbi-devel
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
@@ -57,6 +57,18 @@ DBI plygin for dictd server.
 
 %description plugin-dbi -l pl
 Wtyczka DBI dla serwera dictd.
+
+%package plugin-judy
+Summary:	Judy plygin for dictd server
+Summary(pl):	Wtyczka Judy dla serwera dictd
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-judy
+Judy plygin for dictd server.
+
+%description plugin-judy -l pl
+Wtyczka Judy dla serwera dictd.
 
 %package -n dict
 Summary:	DICT Protocol Client
@@ -116,6 +128,9 @@ dane do pseudo-swobodnego dostêpu do pliku.
 %prep
 %setup -q
 %patch0 -p1
+
+# broken test if >1 plugins
+%{__perl} -pi -e 's/test \$\(PLUGINS\)/test "\$\(PLUGINS\)"/' Makefile.in
 
 %build
 cp -f %{_datadir}/automake/config.* .
@@ -188,6 +203,10 @@ fi
 %files plugin-dbi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/dictdplugin_dbi.so
+
+%files plugin-judy
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/dictdplugin_judy.so
 
 %files -n dict
 %defattr(644,root,root,755)
