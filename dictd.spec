@@ -5,8 +5,6 @@ Version:	1.5.5
 Release:	5
 License:	GPL
 Group:		Daemons
-Group(de):	Server
-Group(pl):	Serwery
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -37,8 +35,6 @@ definicji s³ownikowych z zestawu baz danych.
 Summary:	DICT Protocol Client
 Summary(pl):	Klient protoko³u DICT
 Group:		Applications/Networking
-Group(de):	Applikationen/Netzwerkwesen
-Group(pl):	Aplikacje/Sieciowe
 
 %description -n dict
 Client for the Dictionary Server Protocol (DICT), a TCP transaction
@@ -54,8 +50,6 @@ definicji s³ownikowych z zestawu baz danych.
 Summary:	Compress (or expand) files, allowing random access
 Summary(pl):	Kompresja (i dekompresja) plików pozwalaj±ca na swobodny dostêp
 Group:		Applications/Archiving
-Group(de):	Applikationen/Archivierung
-Group(pl):	Aplikacje/Archiwizacja
 
 %description -n dictzip
 dictzip compresses files using the gzip(1) algorithm (LZ77) in a
