@@ -13,6 +13,7 @@ Source2:	%{name}.sysconfig
 URL:		http://www.dict.org/
 Requires:	/bin/cat
 Requires:	/bin/ls
+Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description 
@@ -45,6 +46,7 @@ definicji s³ownikowych z zestawu baz danych.
 
 %package -n dictzip
 Summary:	Compress (or expand) files, allowing random access
+Summary(pl):	Kompresja (i dekompresja) plików pozwalaj±ca na swobodny dostêp
 Group:		Applications/Archiving
 Group(de):	Applikationen/Archivierung
 Group(pl):	Aplikacje/Archiwizacja
@@ -58,12 +60,12 @@ compressed file. Dictd, the DICT protocol dictionary server will make
 use of this data to perform pseudo-random access on the file.
 
 %description -n dictzip -l pl
-dictzip kompresuje pliki ko¿ystaj±c z zawartego w gzip(1) algorytmu
+dictzip kompresuje pliki korzystaj±c z zawartego w gzip(1) algorytmu
 (LZ77) który jest ca³kowicie kompatybilny z formatem plików gzip.
-Rozszerzenie do formatu plików gzip(pole dodatkowe, opisane w 2.3.1.1
+Rozszerzenie do formatu plików gzip (pole dodatkowe, opisane w 2.3.1.1
 RFC 1952) pozwalaj±cego na dodatkowe dane zapisane w nag³ówku
 skompresowanego pliku. Dictd, serwer protoko³u DICT wykorzystuje te
-dane do pseudo-losowego dostêpu do pliku.
+dane do pseudo-swobodnego dostêpu do pliku.
 
 %prep
 %setup -q
@@ -114,7 +116,7 @@ else
 fi
     
 %preun
-if [ $1 = 0 ]; then
+if [ "$1" = "0" ]; then
         /sbin/chkconfig --del %{name}
         /etc/rc.d/init.d/%{name} stop >&2 || true
 fi
