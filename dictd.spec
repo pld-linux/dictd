@@ -1,28 +1,27 @@
 Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
-Version:	1.9.7
+Version:	1.9.14
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
-Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
-# Source0-md5:	baa8f18dd0373e7053658be99d40d5db
+Source0:	http://dl.sourceforge.net/dict/%{name}-%{version}.tar.gz
+# Source0-md5:	5db913e545ee483b1385696ff8a6bd24
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-opt.patch
-Patch2:		%{name}-ac253.patch
+Patch0:		%{name}-opt.patch
 URL:		http://www.dict.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	libltdl-devel
+BuildRequires:	judy-devel
+BuildRequires:	libdbi-devel
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		specflags_ia32	"-fomit-frame-pointer"
+%define		specflags_ia32	 -fomit-frame-pointer 
 
 %description
 Server for the Dictionary Server Protocol (DICT), a TCP transaction
@@ -34,6 +33,42 @@ databases.
 Serwer dla Dictionary Server Protocol (DICT), bazuj±cego na TCP
 protoko³u zapytañ i odpowiedzi umo¿liwiaj±cego klientom na dostêp do
 definicji s³ownikowych z zestawu baz danych.
+
+%package devel
+Summary:	Package for dictd plugins development
+Summary(pl):	Pakiet programistyczny do tworzenia wtyczek dictd
+Group:		Development/Libraries
+# doesn't require base
+
+%description devel
+Package for dictd plugins development.
+
+%description devel -l pl
+Pakiet programistyczny do tworzenia wtyczek dictd.
+
+%package plugin-dbi
+Summary:	DBI plygin for dictd server
+Summary(pl):	Wtyczka DBI dla serwera dictd
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-dbi
+DBI plygin for dictd server.
+
+%description plugin-dbi -l pl
+Wtyczka DBI dla serwera dictd.
+
+%package plugin-judy
+Summary:	Judy plygin for dictd server
+Summary(pl):	Wtyczka Judy dla serwera dictd
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-judy
+Judy plygin for dictd server.
+
+%description plugin-judy -l pl
+Wtyczka Judy dla serwera dictd.
 
 %package -n dict
 Summary:	DICT Protocol Client
@@ -55,7 +90,6 @@ Summary:	dictfmt utility to convert databases in various formats into dict forma
 Summary(pl):	Narzêdzie dictfmt do konwersji baz w ró¿nych formatach na format dict
 Group:		Applications/Text
 Obsoletes:	dict-fmt
-Obsoletes:	dictfmt
 
 %description -n dictfmt
 dictfmt utility is designed to convert databases in various formats
@@ -94,8 +128,9 @@ dane do pseudo-swobodnego dostêpu do pliku.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
+
+# broken test if >1 plugins
+%{__perl} -pi -e 's/test \$\(PLUGINS\)/test "\$\(PLUGINS\)"/' Makefile.in
 
 %build
 cp -f %{_datadir}/automake/config.* .
@@ -113,15 +148,10 @@ CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_bindir},%{_sbindir}} \
-		$RPM_BUILD_ROOT{%{_datadir}/%{name},%{_mandir}/man{1,8}}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_datadir}/%{name}}
 
-install dict dictzip dictfmt{,_{index2suffix,index2word,plugin,virtual}} \
-	dictunformat $RPM_BUILD_ROOT%{_bindir}
-install dict*.1 $RPM_BUILD_ROOT%{_mandir}/man1
-
-install %{name} $RPM_BUILD_ROOT%{_sbindir}
-install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 echo "server localhost" > dict.conf
 echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > %{name}-main.conf
@@ -155,7 +185,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCE ChangeLog README* TODO dictd.conf example* security.txt
+%doc ANNOUNCE NEWS README* TODO dictd.conf example* security.txt
 %ghost %{_sysconfdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/%{name}/%{name}-main.conf
@@ -165,11 +195,28 @@ fi
 %dir %{_datadir}/%{name}
 %{_mandir}/man8/%{name}*
 
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dictdplugin-config
+%{_includedir}/dictdplugin.h
+
+%files plugin-dbi
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/dictdplugin_dbi.so
+
+%files plugin-judy
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/dictdplugin_judy.so
+
 %files -n dict
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dict.conf
+%attr(755,root,root) %{_bindir}/colorit
 %attr(755,root,root) %{_bindir}/dict
+%attr(755,root,root) %{_bindir}/dictl
+%{_mandir}/man1/colorit.1*
 %{_mandir}/man1/dict.1*
+%{_mandir}/man1/dictl.1*
 
 %files -n dictfmt
 %defattr(644,root,root,755)

@@ -1,9 +1,9 @@
-diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
---- dictd-1.5.5.orig/configure.in	Sat Nov 17 20:19:56 2001
-+++ dictd-1.5.5/configure.in	Sat Nov 17 20:20:57 2001
-@@ -42,23 +42,14 @@
- echo Configuring for dict
- echo .
+diff -ur dictd-1.9.10.orig/configure.in dictd-1.9.10/configure.in
+--- dictd-1.9.10.orig/configure.in	Thu Jul 24 15:46:44 2003
++++ dictd-1.9.10/configure.in	Thu Jul 24 15:48:00 2003
+@@ -48,14 +48,6 @@
+ 
+ DICT_VERSION=VERSION
  
 -AC_ARG_WITH(cc,
 -[  --with-cc               with cc (instead of gcc)],
@@ -16,8 +16,7 @@ diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
  AC_CANONICAL_HOST
  AC_PROG_CC
  dnl AC_PROG_CXX
-
- AC_ISC_POSIX
+@@ -64,7 +56,6 @@
  
  REALCC="$CC"
  if test "$CC" = gcc; then
@@ -25,7 +24,7 @@ diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
      WCFLAGS='-Wall'
      case "$host" in
        dnl did include: -Winline
-@@ -68,18 +59,12 @@
+@@ -76,8 +67,6 @@
      esac
  				# Silence flex/bison output
      SCFLAGS="-Wno-implicit -Wno-unused"
@@ -34,8 +33,9 @@ diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
  fi
  
  local_dmalloc=0
- local_libmaa=0
+@@ -85,10 +74,6 @@
  local_zlib=0
+ local_regex=0
  
 -AC_ARG_WITH(cflags,
 -[  --with-cflags=FLAGS     use FLAGS for CFLAGS],
@@ -44,10 +44,10 @@ diff -Nur dictd-1.5.5.orig/configure.in dictd-1.5.5/configure.in
  AC_ARG_WITH(prof,
  [  --with-prof             with prof profiling],
  [
-diff -Nur dictd-1.5.5.orig/libmaa/configure.in dictd-1.5.5/libmaa/configure.in
---- dictd-1.5.5.orig/libmaa/configure.in	Mon Jul  6 00:14:34 1998
-+++ dictd-1.5.5/libmaa/configure.in	Sat Nov 17 20:21:30 2001
-@@ -43,25 +43,14 @@
+diff -ur dictd-1.9.10.orig/libmaa/configure.in dictd-1.9.10/libmaa/configure.in
+--- dictd-1.9.10.orig/libmaa/configure.in	Thu Jul 24 15:46:44 2003
++++ dictd-1.9.10/libmaa/configure.in	Thu Jul 24 15:49:01 2003
+@@ -44,14 +44,6 @@
  echo Configuring for libmaa $MAA_MAJOR.$MAA_MINOR
  echo .
  
@@ -62,7 +62,7 @@ diff -Nur dictd-1.5.5.orig/libmaa/configure.in dictd-1.5.5/libmaa/configure.in
  AC_CANONICAL_HOST
  AC_PROG_AWK
  AC_PROG_CC
- AC_ISC_POSIX
+@@ -59,10 +51,7 @@
  
  REALCC="$CC"
  if test "$CC" = gcc; then
@@ -73,7 +73,7 @@ diff -Nur dictd-1.5.5.orig/libmaa/configure.in dictd-1.5.5/libmaa/configure.in
  fi
  
  needs_xmalloc=1
-@@ -75,14 +64,6 @@
+@@ -77,14 +66,7 @@
      WCFLAGS="$WCFLAGS -pipe";;
  esac
  
@@ -85,6 +85,7 @@ diff -Nur dictd-1.5.5.orig/libmaa/configure.in dictd-1.5.5/libmaa/configure.in
 -fi
 -])
 -
++CFLAGS="$CFLAGS -fPIC"
  AC_ARG_WITH(prof,
  [  --with-prof             with prof profiling],
  [
