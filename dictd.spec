@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.8.0
-Release:	1
+Release:	2
 License:	GPL
 Group:		Daemons
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
@@ -11,6 +11,7 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-opt.patch
 Patch2:		%{name}-smp.patch
+Patch3:		%{name}-ac253.patch
 URL:		http://www.dict.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -73,11 +74,17 @@ dane do pseudo-swobodnego dostêpu do pliku.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
-aclocal
+cp -f /usr/share/automake/config.* .
+%{__aclocal}
 %{__autoconf}
-(cd libmaa; aclocal; autoconf)
+cd libmaa
+cp -f /usr/share/automake/config.* .
+%{__aclocal}
+%{__autoconf}
+cd ..
 CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
 %configure
 
