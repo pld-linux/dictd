@@ -5,10 +5,10 @@ Release:	3
 License:	GPL
 Group:		Daemons
 Group(pl):	Serwery
-URL:		http://www.dict.org/
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+URL:		http://www.dict.org/
 Requires:	/bin/cat
 Requires:	/bin/ls
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -19,7 +19,7 @@ based query/response protocol that allows a client to access
 dictionary definitions from a set of natural language dictionary
 databases.
 
-%package        -n dict
+%package -n dict
 Summary:	DICT Protocol Client
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
@@ -29,7 +29,7 @@ Client for the Dictionary Server Protocol (DICT), a TCP transaction
 based query/response protocol that provides access to dictionary
 definitions from a set of natural language dictionary databases.
 
-%package        -n dictzip
+%package -n dictzip
 Summary:	Compress (or expand) files, allowing random access
 Group:		Utilities/Archiving
 Group(pl):	Narzêdzia/Archiwizacja
@@ -52,7 +52,11 @@ use of this data to perform pseudo-random access on the file.
 # TODO: 
 # - patch needed instead of use -DUID_NOBODY=`id -u nobody`
 #
-%configure --with-cflags="-DUID_NOBODY=`id -u nobody` $RPM_OPT_FLAGS"
+LDFLAGS="-s"
+CFLAGS="-DUID_NOBODY=`id -u nobody` $RPM_OPT_FLAGS"
+export LDFLAGS CFLAGS
+%configure \
+	--with-local-zlib=no
 %{__make}
 
 %install
@@ -60,29 +64,23 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_bindir},%{_sbindir}} \
 	   $RPM_BUILD_ROOT{%{_datadir}/dictd,%{_mandir}/man{1,8}}
 
-for f in dict dictzip; do
-	install -s $f $RPM_BUILD_ROOT/%{_bindir}
-        gzip -9nf $f.1
-	install $f.1.gz $RPM_BUILD_ROOT/%{_mandir}/man1
-done 
+install dict dictzip $RPM_BUILD_ROOT/%{_bindir}
+install {dict,dictzip}.1 $RPM_BUILD_ROOT/%{_mandir}/man1
 
-install -s dictd $RPM_BUILD_ROOT/%{_sbindir}
-gzip -9nf dictd.8
-install dictd.8.gz $RPM_BUILD_ROOT/%{_mandir}/man8
+install dictd $RPM_BUILD_ROOT/%{_sbindir}
+install dictd.8 $RPM_BUILD_ROOT/%{_mandir}/man8
 
 echo "server localhost" > dict.conf
 echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > dictd.conf 
-install dict.conf dictd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 
-mkdir $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-install %{name}.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}-main.conf
+install dict.conf dictd.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 touch %{buildroot}%{_sysconfdir}/%{name}.conf
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
 
 mv -f doc/security.doc security.txt
-gzip -9nf {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}
-gzip -9nf example.dictrc
+gzip -9nf {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt} \
+	$RPM_BUILD_ROOT/%{_mandir}/man*/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -103,12 +101,10 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%attr(750,root,root) %dir %{_sysconfdir}/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/%{name}-main.conf
-%attr(640,root,root) %verify(not size mtime md5) %{_sysconfdir}/%{name}.conf
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}.conf
 %attr(755,root,root) %{_sbindir}/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
 %dir %{_datadir}/dictd
 %{_mandir}/man8/%{name}*
 %doc {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}.gz
@@ -117,9 +113,9 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/dict.conf
 %attr(755,root,root) %{_bindir}/dict
-%{_mandir}/man1/dict.1.gz
+%{_mandir}/man1/dict.1*
 
 %files -n dictzip
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dictzip
-%{_mandir}/man1/dictzip.1.gz
+%{_mandir}/man1/dictzip.1*
