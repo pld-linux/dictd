@@ -65,31 +65,29 @@ case "$1" in
 		fi    
 	else
 		msg_already_running ${DAEMON_NAME}
-		exit 1
 	fi
 	;;
   stop)
 	if [ -f /var/lock/subsys/${DAEMON_FILE} ]; then
 		msg_stopping ${DAEMON_NAME}
-		busy
 		killproc /usr/sbin/${DAEMON_FILE} 
 		rm -f /var/lock/subsys/${DAEMON_FILE} >/dev/null 2>&1
 	else
 		msg_not_running ${DAEMON_NAME}
-		exit 1
 	fi	
 	;;
   status)
 	status ${DAEMON_FILE}
+	exit $?
 	;;
-  restart|reload)
+  restart|force-reload)
 	$0 stop
 	$0 start
+	exit $?
 	;;
     *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 1
-	;;
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
