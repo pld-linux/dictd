@@ -108,18 +108,10 @@ gzip -9nf {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.sit
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsystem/%{name} ]; then
-        /etc/rc.d/init.d/%{name} restart >&2
-else
-        echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
-fi
+DESC="dictd daemon"; %chkconfig_add
     
 %preun
-if [ $1 = 0 ]; then
-        /sbin/chkconfig --del %{name}
-        /etc/rc.d/init.d/%{name} stop >&2 || true
-fi
+%chkconfig_del
 
 %files
 %defattr(644,root,root,755)
