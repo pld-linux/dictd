@@ -6,6 +6,7 @@ Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
+# Source0-md5:	baa8f18dd0373e7053658be99d40d5db
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-no_libnsl.patch
