@@ -44,7 +44,6 @@ diff -ur dictd-1.9.10.orig/configure.in dictd-1.9.10/configure.in
  AC_ARG_WITH(prof,
  [  --with-prof             with prof profiling],
  [
-Only in dictd-1.9.10: configure.in~
 diff -ur dictd-1.9.10.orig/libmaa/configure.in dictd-1.9.10/libmaa/configure.in
 --- dictd-1.9.10.orig/libmaa/configure.in	Thu Jul 24 15:46:44 2003
 +++ dictd-1.9.10/libmaa/configure.in	Thu Jul 24 15:49:01 2003
@@ -74,7 +73,7 @@ diff -ur dictd-1.9.10.orig/libmaa/configure.in dictd-1.9.10/libmaa/configure.in
  fi
  
  needs_xmalloc=1
-@@ -77,14 +66,6 @@
+@@ -77,14 +66,7 @@
      WCFLAGS="$WCFLAGS -pipe";;
  esac
  
@@ -86,7 +85,7 @@ diff -ur dictd-1.9.10.orig/libmaa/configure.in dictd-1.9.10/libmaa/configure.in
 -fi
 -])
 -
++CFLAGS="$CFLAGS -fPIC"
  AC_ARG_WITH(prof,
  [  --with-prof             with prof profiling],
  [
-Only in dictd-1.9.10/libmaa: configure.in~
