@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.5.5
-Release:	1
+Release:	2
 License:	GPL
 Group:		Daemons
 Group(de):	Server
@@ -72,11 +72,9 @@ dane do pseudo-losowego dostêpu do pliku.
 # --without-local-zlib option gives no effect. Usage of zlib from dictd tarball 
 # is hardcoded in configure. 
 # 
-# TODO: 
-# - patch needed instead of use -DUID_NOBODY=`id -u nobody`
-#
-CFLAGS="%{rpmcflags} -DUID_NOBODY=`id -u nobody`"
-export CFLAGS
+aclocal
+autoconf
+(cd libmaa; aclocal; autoconf)
 %configure \
 	--with-local-zlib=no
 %{__make}
