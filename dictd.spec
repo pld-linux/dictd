@@ -1,7 +1,7 @@
 Summary:	Dictionary database server
 Name:		dictd
 Version:	1.5.0
-Release:	1
+Release:	2
 License:	GPL
 Group:		Daemons
 Group(pl):	Serwery
@@ -100,17 +100,17 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%config(noreplace) %{_sysconfdir}/%{name}.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
 %attr(755,root,root) /etc/rc.d/init.d/%{name}
-%{_sysconfdir}/sysconfig/%{name}
 %dir %{_datadir}/dictd
 %{_mandir}/man8/%{name}*
 %doc {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}.gz
 
 %files -n dict
 %defattr(644,root,root,755)
-%config(noreplace) %{_sysconfdir}/dict.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/dict.conf
 %attr(755,root,root) %{_bindir}/dict
 %{_mandir}/man1/dict.1.gz
 
