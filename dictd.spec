@@ -22,6 +22,8 @@ BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		specflags_ia32	"-fomit-frame-pointer"
+
 %description
 Server for the Dictionary Server Protocol (DICT), a TCP transaction
 based query/response protocol that allows a client to access
