@@ -10,6 +10,7 @@ Group(pl):	Serwery
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Patch0:		%{name}-no_libnsl.patch
 URL:		http://www.dict.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -70,6 +71,7 @@ dane do pseudo-swobodnego dostêpu do pliku.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 # --without-local-zlib option gives no effect. Usage of zlib from dictd tarball 
