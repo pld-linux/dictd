@@ -1,7 +1,7 @@
 Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
-Version:	1.7.1
+Version:	1.8.0
 Release:	1
 License:	GPL
 Group:		Daemons
@@ -9,13 +9,14 @@ Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-system-zlib.patch
-Patch2:		%{name}-opt.patch
+Patch1:		%{name}-opt.patch
+Patch2:		%{name}-smp.patch
 URL:		http://www.dict.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	flex
 BuildRequires:	bison
+BuildRequires:	flex
+BuildRequires:	libltdl-devel
 BuildRequires:	zlib-devel
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -103,7 +104,6 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 mv -f doc/security.doc security.txt
-gzip -9nf {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -126,7 +126,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc ANNOUNCE ChangeLog README* TODO dictd.conf example* security.txt
 %ghost %{_sysconfdir}/%{name}.conf
 %attr(755,root,root) %{_sbindir}/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
