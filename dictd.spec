@@ -2,9 +2,9 @@ Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
 Version:	1.8.0
-Release:	2
+Release:	3
 License:	GPL
-Group:		Daemons
+Group:		Networking/Daemons
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -19,7 +19,7 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	libltdl-devel
 BuildRequires:	zlib-devel
-Prereq:		/sbin/chkconfig
+PreReq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -93,7 +93,7 @@ CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_bindir},%{_sbindir}} \
-	   $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_mandir}/man{1,8}}
+		$RPM_BUILD_ROOT{%{_datadir}/%{name},%{_mandir}/man{1,8}}
 
 install dict dictzip $RPM_BUILD_ROOT%{_bindir}
 install {dict,dictzip}.1 $RPM_BUILD_ROOT%{_mandir}/man1
@@ -118,9 +118,9 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add %{name}
 if [ -f /var/lock/subsys/%{name} ]; then
-        /etc/rc.d/init.d/%{name} restart >&2
+	/etc/rc.d/init.d/%{name} restart >&2
 else
-        echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
 fi
 
 %preun
@@ -135,17 +135,17 @@ fi
 %defattr(644,root,root,755)
 %doc ANNOUNCE ChangeLog README* TODO dictd.conf example* security.txt
 %ghost %{_sysconfdir}/%{name}.conf
-%attr(755,root,root) %{_sbindir}/%{name}
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
-%dir %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}
-%{_sysconfdir}/%{name}/%{name}-main.conf
+%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/%{name}/%{name}-main.conf
+%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/sysconfig/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(755,root,root) %{_sbindir}/%{name}
+%dir %{_datadir}/%{name}
 %{_mandir}/man8/%{name}*
 
 %files -n dict
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/dict.conf
+%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dict.conf
 %attr(755,root,root) %{_bindir}/dict
 %{_mandir}/man1/dict.1*
 
