@@ -84,7 +84,7 @@ autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/{rc.d/init.d,sysconfig,%{name}},%{_bindir},%{_sbindir}} \
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_bindir},%{_sbindir}} \
 	   $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_mandir}/man{1,8}}
 
 install dict dictzip $RPM_BUILD_ROOT/%{_bindir}
@@ -96,11 +96,11 @@ install %{name}.8 $RPM_BUILD_ROOT/%{_mandir}/man8
 echo "server localhost" > dict.conf
 echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > %{name}-main.conf 
 
-install dict.conf $RPM_BUILD_ROOT%{_sysconfdir}/
-install dictd-main.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
+install dict.conf $RPM_BUILD_ROOT%{_sysconfdir}
+install dictd-main.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 touch %{buildroot}%{_sysconfdir}/%{name}.conf
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 mv -f doc/security.doc security.txt
 gzip -9nf {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}
@@ -118,12 +118,15 @@ fi
     
 %preun
 if [ "$1" = "0" ]; then
-        /sbin/chkconfig --del %{name}
-        /etc/rc.d/init.d/%{name} stop >&2 || true
+	if [ -f /var/lock/subsys/%{name} ]; then
+		/etc/rc.d/init.d/%{name} stop >&2
+	fi
+	/sbin/chkconfig --del %{name}
 fi
 
 %files
 %defattr(644,root,root,755)
+%doc *.gz
 %ghost %{_sysconfdir}/%{name}.conf
 %attr(755,root,root) %{_sbindir}/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
@@ -132,7 +135,6 @@ fi
 %dir %{_sysconfdir}/%{name}
 %{_sysconfdir}/%{name}/%{name}-main.conf
 %{_mandir}/man8/%{name}*
-%doc {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}.gz
 
 %files -n dict
 %defattr(644,root,root,755)
