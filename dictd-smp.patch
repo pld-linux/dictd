@@ -1,0 +1,20 @@
+--- dictd-orig/Makefile.in	Tue Sep 17 15:28:34 2002
++++ dictd-1.8.0/Makefile.in	Tue Sep 17 15:36:26 2002
+@@ -120,7 +120,7 @@
+ servscan.o: servscan.c servparse.o servparse.h $(HEADERS)
+ 	$(CC) -c $(XTRACFLAGS) $(CFLAGS) $(SCFLAGS) $<
+ 
+-servparse.c: servparse.y
++servparse.c servparse.h: servparse.y
+ 	$(YACC) -tdv $<
+ 	cmp -s y.tab.h servparse.h || mv y.tab.h servparse.h
+ 	cmp -s y.tab.c servparse.c || mv y.tab.c servparse.c
+@@ -135,7 +135,7 @@
+ clientscan.o: clientscan.c clientparse.o clientparse.h $(HEADERS)
+ 	$(CC) -c $(XTRACFLAGS) $(CFLAGS) $(SCFLAGS) $<
+ 
+-clientparse.c: clientparse.y
++clientparse.c clientparse.h: clientparse.y
+ 	$(YACC) -tdv $<
+ 	cmp -s y.tab.h clientparse.h || mv y.tab.h clientparse.h
+ 	cmp -s y.tab.c clientparse.c || mv y.tab.c clientparse.c
