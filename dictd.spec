@@ -166,16 +166,16 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dict.conf
 %attr(755,root,root) %{_bindir}/dict
-%{_mandir}/man1/dict.1.*
+%{_mandir}/man1/dict.1*
 
 %files -n dictfmt
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dictfmt*
 %attr(755,root,root) %{_bindir}/dictunformat
-%{_mandir}/man1/dictfmt*.1.*
-%{_mandir}/man1/dictunformat.1.*
+%{_mandir}/man1/dictfmt*.1*
+%{_mandir}/man1/dictunformat.1*
 
 %files -n dictzip
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dictzip
-%{_mandir}/man1/dictzip.1.*
+%{_mandir}/man1/dictzip.1*
