@@ -8,6 +8,7 @@ Group(pl):	Serwery
 URL:		http://www.dict.org/
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description 
@@ -41,32 +42,39 @@ use of this data to perform pseudo-random access on the file.
 
 %prep
 %setup -q -n %{name}-%{version}
-#%patch0 -p0
 
 %build
-%configure --without-local-zlib
+# --without-local-zlib option gives no effect. Usage of zlib from dictd tarball 
+# is hardcoded in configure. 
+# 
+# TODO: 
+# - patch needed instead of use -DUID_NOBODY=`id -u nobody`
+#
+%configure --with-cflags="-DUID_NOBODY=`id -u nobody` $RPM_OPT_FLAGS"
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_bindir},%{_sbindir},%{_datadir}/dict,%{_mandir}/man{1,8}}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_bindir},%{_sbindir}} \
+	   $RPM_BUILD_ROOT{%{_datadir}/dictd,%{_mandir}/man{1,8}}
 
-# client 
 for f in dict dictzip; do
 	install -s $f $RPM_BUILD_ROOT/%{_bindir}
         gzip -9nf $f.1
 	install $f.1.gz $RPM_BUILD_ROOT/%{_mandir}/man1
 done 
 
-
 install -s dictd $RPM_BUILD_ROOT/%{_sbindir}
-gzip -9nf  dictd.8
-install -s dictd.8.gz $RPM_BUILD_ROOT/%{_mandir}/man8
+gzip -9nf dictd.8
+install dictd.8.gz $RPM_BUILD_ROOT/%{_mandir}/man8
 
 echo "server localhost" > dict.conf
-install dict.conf $RPM_BUILD_ROOT%{_sysconfdir}/
+echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > dictd.conf 
+
+install dict.conf dictd.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 touch %{buildroot}%{_sysconfdir}/%{name}.conf
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
 
 mv -f doc/security.doc security.txt
 gzip -9nf {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}
@@ -76,17 +84,27 @@ gzip -9nf example.dictrc
 rm -rf $RPM_BUILD_ROOT
 
 %post
-chkconfig --add %{name} 
+/sbin/chkconfig --add %{name}
 
+if [ -f /var/lock/subsystem/%{name} ]; then
+        /etc/rc.d/init.d/%{name} restart >&2
+else
+        echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+fi
+    
 %preun
-/etc/rc.d/init.d/%{name} stop
+if [ $1 = 0 ]; then
+        /sbin/chkconfig --del %{name}
+        /etc/rc.d/init.d/%{name} stop >&2 || true
+fi
 
 %files
 %defattr(644,root,root,755)
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %attr(755,root,root) %{_sbindir}/%{name}
 %attr(755,root,root) /etc/rc.d/init.d/%{name}
-%dir %{_datadir}/dict
+%{_sysconfdir}/sysconfig/%{name}
+%dir %{_datadir}/dictd
 %{_mandir}/man8/%{name}*
 %doc {ANNOUNCE,ChangeLog,README,TODO,%{name}.conf,example*.conf,example.site,security.txt}.gz
 
