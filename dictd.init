@@ -36,7 +36,7 @@ generate_dictdconf() {
 . /etc/sysconfig/network
 
 if is_yes "${NETWORKING}"; then
-	if [ ! -f /var/lock/subsys/network ]; then
+	if [ ! -f /var/lock/subsys/network -a != stop -a != status ]; then
 		msg_network_down ${DAEMON_FILE}
 		exit 1
 	fi
