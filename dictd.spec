@@ -1,7 +1,7 @@
 Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
-Version:	1.9.1
+Version:	1.9.7
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
@@ -28,7 +28,7 @@ dictionary definitions from a set of natural language dictionary
 databases.
 
 %description -l pl
-Serwer dla Dictionary Server Protocol(DICT), bazuj±cego na TCP
+Serwer dla Dictionary Server Protocol (DICT), bazuj±cego na TCP
 protoko³u zapytañ i odpowiedzi umo¿liwiaj±cego klientom na dostêp do
 definicji s³ownikowych z zestawu baz danych.
 
@@ -43,9 +43,29 @@ based query/response protocol that provides access to dictionary
 definitions from a set of natural language dictionary databases.
 
 %description -n dict -l pl
-Klient dla Dictionary Server Protocol(DICT), bazuj±cego na TCP
+Klient dla Dictionary Server Protocol (DICT), bazuj±cego na TCP
 protoko³u zapytañ i odpowiedzi umo¿liwiaj±cego klientom na dostêp do
 definicji s³ownikowych z zestawu baz danych.
+
+%package -n dictfmt
+Summary:	dictfmt utility to convert databases in various formats into dict format
+Summary(pl):	Narzêdzie dictfmt do konwersji baz w ró¿nych formatach na format dict
+Group:		Applications/Text
+Obsoletes:	dict-fmt
+Obsoletes:	dictfmt
+
+%description -n dictfmt
+dictfmt utility is designed to convert databases in various formats
+into working databases and indexes for the DICT server.
+This package also includes other tools for formating databases:
+dictfmt_{index2suffix,index2word,plugin,virtual} and dictunformat.
+
+%description -n dictfmt -l pl
+Narzêdzie dictfmt s³u¿y do konwertowania baz danych w ró¿nych
+formatach na dzia³aj±ce bazy danych i indeksy dla serwera s³owników
+DICT.
+Ten pakiet zawiera tak¿e inne narzêdzia do formatowania baz:
+dictfmt_{index2suffix,index2word,plugin,virtual} and dictunformat.
 
 %package -n dictzip
 Summary:	Compress (or expand) files, allowing random access
@@ -93,8 +113,9 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_bindir},%{_sbindir}} \
 		$RPM_BUILD_ROOT{%{_datadir}/%{name},%{_mandir}/man{1,8}}
 
-install dict dictzip $RPM_BUILD_ROOT%{_bindir}
-install {dict,dictzip}.1 $RPM_BUILD_ROOT%{_mandir}/man1
+install dict dictzip dictfmt{,_{index2suffix,index2word,plugin,virtual}} \
+	dictunformat $RPM_BUILD_ROOT%{_bindir}
+install dict*.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
 install %{name} $RPM_BUILD_ROOT%{_sbindir}
 install %{name}.8 $RPM_BUILD_ROOT%{_mandir}/man8
@@ -104,7 +125,7 @@ echo -e "access {\n\tallow localhost\n\tdeny *\n}\n" > %{name}-main.conf
 
 install dict.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install dictd-main.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-touch $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
+:> $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
@@ -145,9 +166,16 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dict.conf
 %attr(755,root,root) %{_bindir}/dict
-%{_mandir}/man1/dict.1*
+%{_mandir}/man1/dict.1.*
+
+%files -n dictfmt
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dictfmt*
+%attr(755,root,root) %{_bindir}/dictunformat
+%{_mandir}/man1/dictfmt*.1.*
+%{_mandir}/man1/dictunformat.1.*
 
 %files -n dictzip
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dictzip
-%{_mandir}/man1/dictzip.1*
+%{_mandir}/man1/dictzip.1.*
