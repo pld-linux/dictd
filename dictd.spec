@@ -1,8 +1,8 @@
 Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
-Version:	1.5.5
-Release:	6
+Version:	1.7.1
+Release:	1
 License:	GPL
 Group:		Daemons
 Source0:	ftp://ftp.dict.org/pub/dict/%{name}-%{version}.tar.gz
