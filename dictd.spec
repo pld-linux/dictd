@@ -137,7 +137,7 @@ fi
 %ghost %{_sysconfdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/%{name}/%{name}-main.conf
-%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/sysconfig/%{name}
+%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
 %dir %{_datadir}/%{name}
