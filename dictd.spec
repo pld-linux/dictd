@@ -13,6 +13,7 @@ Source2:	%{name}.sysconfig
 URL:		http://www.dict.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	flex
 Requires:	/bin/cat
 Requires:	/bin/ls
 Prereq:		/sbin/chkconfig
