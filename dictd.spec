@@ -18,7 +18,7 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	libltdl-devel
 BuildRequires:	zlib-devel
-PreReq:		/sbin/chkconfig
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
