@@ -1,12 +1,12 @@
 Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
-Version:	1.10.0
+Version:	1.10.1
 Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/dict/%{name}-%{version}.tar.gz
-# Source0-md5:	6502cd2d40961247232e2c7b1350f25a
+# Source0-md5:	08280dcfc2eed73acf0a4be4872a72d5
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-opt.patch
