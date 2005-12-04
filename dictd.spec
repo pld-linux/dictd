@@ -19,8 +19,8 @@ BuildRequires:	judy-devel
 BuildRequires:	libdbi-devel
 BuildRequires:	perl-base
 BuildRequires:	zlib-devel
-Requires:	/sbin/chkconfig
 Requires(post,preun):	/sbin/chkconfig
+Requires:	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		specflags_ia32	 -fomit-frame-pointer 
@@ -95,15 +95,14 @@ Obsoletes:	dict-fmt
 
 %description -n dictfmt
 dictfmt utility is designed to convert databases in various formats
-into working databases and indexes for the DICT server.
-This package also includes other tools for formating databases:
+into working databases and indexes for the DICT server. This package
+also includes other tools for formating databases:
 dictfmt_{index2suffix,index2word,plugin,virtual} and dictunformat.
 
 %description -n dictfmt -l pl
 Narzêdzie dictfmt s³u¿y do konwertowania baz danych w ró¿nych
 formatach na dzia³aj±ce bazy danych i indeksy dla serwera s³owników
-DICT.
-Ten pakiet zawiera tak¿e inne narzêdzia do formatowania baz:
+DICT. Ten pakiet zawiera tak¿e inne narzêdzia do formatowania baz:
 dictfmt_{index2suffix,index2word,plugin,virtual} and dictunformat.
 
 %package -n dictzip
@@ -190,8 +189,8 @@ fi
 %doc ANNOUNCE NEWS README* TODO dictd.conf example* security.txt
 %ghost %{_sysconfdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
-%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/%{name}/%{name}-main.conf
-%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/%{name}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}-main.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
 %dir %{_datadir}/%{name}
@@ -212,7 +211,7 @@ fi
 
 %files -n dict
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dict.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dict.conf
 %attr(755,root,root) %{_bindir}/colorit
 %attr(755,root,root) %{_bindir}/dict
 %attr(755,root,root) %{_bindir}/dictl
