@@ -1,5 +1,5 @@
 Summary:	Dictionary database server
-Summary(pl.UTF-8):   Serwer bazy słowników
+Summary(pl.UTF-8):	Serwer bazy słowników
 Name:		dictd
 Version:	1.10.4
 Release:	1
@@ -38,7 +38,7 @@ definicji słownikowych z zestawu baz danych.
 
 %package devel
 Summary:	Package for dictd plugins development
-Summary(pl.UTF-8):   Pakiet programistyczny do tworzenia wtyczek dictd
+Summary(pl.UTF-8):	Pakiet programistyczny do tworzenia wtyczek dictd
 Group:		Development/Libraries
 # doesn't require base
 
@@ -50,7 +50,7 @@ Pakiet programistyczny do tworzenia wtyczek dictd.
 
 %package plugin-dbi
 Summary:	DBI plygin for dictd server
-Summary(pl.UTF-8):   Wtyczka DBI dla serwera dictd
+Summary(pl.UTF-8):	Wtyczka DBI dla serwera dictd
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -62,7 +62,7 @@ Wtyczka DBI dla serwera dictd.
 
 %package plugin-judy
 Summary:	Judy plygin for dictd server
-Summary(pl.UTF-8):   Wtyczka Judy dla serwera dictd
+Summary(pl.UTF-8):	Wtyczka Judy dla serwera dictd
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -74,7 +74,7 @@ Wtyczka Judy dla serwera dictd.
 
 %package -n dict
 Summary:	DICT Protocol Client
-Summary(pl.UTF-8):   Klient protokołu DICT
+Summary(pl.UTF-8):	Klient protokołu DICT
 Group:		Applications/Networking
 
 %description -n dict
@@ -89,7 +89,7 @@ definicji słownikowych z zestawu baz danych.
 
 %package -n dictfmt
 Summary:	dictfmt utility to convert databases in various formats into dict format
-Summary(pl.UTF-8):   Narzędzie dictfmt do konwersji baz w różnych formatach na format dict
+Summary(pl.UTF-8):	Narzędzie dictfmt do konwersji baz w różnych formatach na format dict
 Group:		Applications/Text
 Obsoletes:	dict-fmt
 
@@ -107,7 +107,7 @@ dictfmt_{index2suffix,index2word,plugin,virtual} and dictunformat.
 
 %package -n dictzip
 Summary:	Compress (or expand) files, allowing random access
-Summary(pl.UTF-8):   Kompresja (i dekompresja) plików pozwalająca na swobodny dostęp
+Summary(pl.UTF-8):	Kompresja (i dekompresja) plików pozwalająca na swobodny dostęp
 Group:		Applications/Archiving
 
 %description -n dictzip
