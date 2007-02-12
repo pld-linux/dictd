@@ -1,5 +1,5 @@
 Summary:	Dictionary database server
-Summary(pl):	Serwer bazy s³owników
+Summary(pl.UTF-8):   Serwer bazy sÅ‚ownikÃ³w
 Name:		dictd
 Version:	1.10.4
 Release:	1
@@ -31,50 +31,50 @@ based query/response protocol that allows a client to access
 dictionary definitions from a set of natural language dictionary
 databases.
 
-%description -l pl
-Serwer dla Dictionary Server Protocol (DICT), bazuj±cego na TCP
-protoko³u zapytañ i odpowiedzi umo¿liwiaj±cego klientom na dostêp do
-definicji s³ownikowych z zestawu baz danych.
+%description -l pl.UTF-8
+Serwer dla Dictionary Server Protocol (DICT), bazujÄ…cego na TCP
+protokoÅ‚u zapytaÅ„ i odpowiedzi umoÅ¼liwiajÄ…cego klientom na dostÄ™p do
+definicji sÅ‚ownikowych z zestawu baz danych.
 
 %package devel
 Summary:	Package for dictd plugins development
-Summary(pl):	Pakiet programistyczny do tworzenia wtyczek dictd
+Summary(pl.UTF-8):   Pakiet programistyczny do tworzenia wtyczek dictd
 Group:		Development/Libraries
 # doesn't require base
 
 %description devel
 Package for dictd plugins development.
 
-%description devel -l pl
+%description devel -l pl.UTF-8
 Pakiet programistyczny do tworzenia wtyczek dictd.
 
 %package plugin-dbi
 Summary:	DBI plygin for dictd server
-Summary(pl):	Wtyczka DBI dla serwera dictd
+Summary(pl.UTF-8):   Wtyczka DBI dla serwera dictd
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-dbi
 DBI plygin for dictd server.
 
-%description plugin-dbi -l pl
+%description plugin-dbi -l pl.UTF-8
 Wtyczka DBI dla serwera dictd.
 
 %package plugin-judy
 Summary:	Judy plygin for dictd server
-Summary(pl):	Wtyczka Judy dla serwera dictd
+Summary(pl.UTF-8):   Wtyczka Judy dla serwera dictd
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-judy
 Judy plygin for dictd server.
 
-%description plugin-judy -l pl
+%description plugin-judy -l pl.UTF-8
 Wtyczka Judy dla serwera dictd.
 
 %package -n dict
 Summary:	DICT Protocol Client
-Summary(pl):	Klient protoko³u DICT
+Summary(pl.UTF-8):   Klient protokoÅ‚u DICT
 Group:		Applications/Networking
 
 %description -n dict
@@ -82,14 +82,14 @@ Client for the Dictionary Server Protocol (DICT), a TCP transaction
 based query/response protocol that provides access to dictionary
 definitions from a set of natural language dictionary databases.
 
-%description -n dict -l pl
-Klient dla Dictionary Server Protocol (DICT), bazuj±cego na TCP
-protoko³u zapytañ i odpowiedzi umo¿liwiaj±cego klientom na dostêp do
-definicji s³ownikowych z zestawu baz danych.
+%description -n dict -l pl.UTF-8
+Klient dla Dictionary Server Protocol (DICT), bazujÄ…cego na TCP
+protokoÅ‚u zapytaÅ„ i odpowiedzi umoÅ¼liwiajÄ…cego klientom na dostÄ™p do
+definicji sÅ‚ownikowych z zestawu baz danych.
 
 %package -n dictfmt
 Summary:	dictfmt utility to convert databases in various formats into dict format
-Summary(pl):	Narzêdzie dictfmt do konwersji baz w ró¿nych formatach na format dict
+Summary(pl.UTF-8):   NarzÄ™dzie dictfmt do konwersji baz w rÃ³Å¼nych formatach na format dict
 Group:		Applications/Text
 Obsoletes:	dict-fmt
 
@@ -99,15 +99,15 @@ into working databases and indexes for the DICT server. This package
 also includes other tools for formating databases:
 dictfmt_{index2suffix,index2word,plugin,virtual} and dictunformat.
 
-%description -n dictfmt -l pl
-Narzêdzie dictfmt s³u¿y do konwertowania baz danych w ró¿nych
-formatach na dzia³aj±ce bazy danych i indeksy dla serwera s³owników
-DICT. Ten pakiet zawiera tak¿e inne narzêdzia do formatowania baz:
+%description -n dictfmt -l pl.UTF-8
+NarzÄ™dzie dictfmt sÅ‚uÅ¼y do konwertowania baz danych w rÃ³Å¼nych
+formatach na dziaÅ‚ajÄ…ce bazy danych i indeksy dla serwera sÅ‚ownikÃ³w
+DICT. Ten pakiet zawiera takÅ¼e inne narzÄ™dzia do formatowania baz:
 dictfmt_{index2suffix,index2word,plugin,virtual} and dictunformat.
 
 %package -n dictzip
 Summary:	Compress (or expand) files, allowing random access
-Summary(pl):	Kompresja (i dekompresja) plików pozwalaj±ca na swobodny dostêp
+Summary(pl.UTF-8):   Kompresja (i dekompresja) plikÃ³w pozwalajÄ…ca na swobodny dostÄ™p
 Group:		Applications/Archiving
 
 %description -n dictzip
@@ -118,13 +118,13 @@ of RFC 1952) allows extra data to be stored in the header of a
 compressed file. Dictd, the DICT protocol dictionary server will make
 use of this data to perform pseudo-random access on the file.
 
-%description -n dictzip -l pl
-dictzip kompresuje pliki korzystaj±c z zawartego w gzip(1) algorytmu
-(LZ77) który jest ca³kowicie kompatybilny z formatem plików gzip.
-Rozszerzenie do formatu plików gzip (pole dodatkowe, opisane w 2.3.1.1
-RFC 1952) pozwalaj±cego na dodatkowe dane zapisane w nag³ówku
-skompresowanego pliku. Dictd, serwer protoko³u DICT wykorzystuje te
-dane do pseudo-swobodnego dostêpu do pliku.
+%description -n dictzip -l pl.UTF-8
+dictzip kompresuje pliki korzystajÄ…c z zawartego w gzip(1) algorytmu
+(LZ77) ktÃ³ry jest caÅ‚kowicie kompatybilny z formatem plikÃ³w gzip.
+Rozszerzenie do formatu plikÃ³w gzip (pole dodatkowe, opisane w 2.3.1.1
+RFC 1952) pozwalajÄ…cego na dodatkowe dane zapisane w nagÅ‚Ã³wku
+skompresowanego pliku. Dictd, serwer protokoÅ‚u DICT wykorzystuje te
+dane do pseudo-swobodnego dostÄ™pu do pliku.
 
 %prep
 %setup -q
