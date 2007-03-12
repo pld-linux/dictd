@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl.UTF-8):	Serwer bazy słowników
 Name:		dictd
 Version:	1.10.4
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/dict/%{name}-%{version}.tar.gz
@@ -18,12 +18,13 @@ BuildRequires:	flex
 BuildRequires:	judy-devel
 BuildRequires:	libdbi-devel
 BuildRequires:	perl-base
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
-Requires:	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		specflags_ia32	 -fomit-frame-pointer 
+%define		specflags_ia32	 -fomit-frame-pointer
 
 %description
 Server for the Dictionary Server Protocol (DICT), a TCP transaction
@@ -170,17 +171,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsys/%{name} ]; then
-	/etc/rc.d/init.d/%{name} restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
-fi
+%service dictd restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/%{name} ]; then
-		/etc/rc.d/init.d/%{name} stop >&2
-	fi
+	%service dictd stop
 	/sbin/chkconfig --del %{name}
 fi
 
