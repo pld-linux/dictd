@@ -1,0 +1,10 @@
+--- dictd-1.10.4/net.c~	2007-03-12 03:16:48.309292226 +0200
++++ dictd-1.10.4/net.c	2007-03-12 03:18:03.790998983 +0200
+@@ -188,6 +188,7 @@
+ #endif
+ 
+    chdir("/");		/* cd to safe directory */
++   umask(077);		/* set safe umask */
+ 
+    setpgid(0,getpid());	/* Get process group */
+ 
