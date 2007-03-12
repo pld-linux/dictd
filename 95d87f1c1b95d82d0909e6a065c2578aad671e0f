@@ -1,0 +1,4 @@
+- opt,system-zlib patches: use optflags and system zlib
+- BuildRequires: bison, zlib-devel
+- fixed %post (s/subsystem/subsys/)
+- release 4
