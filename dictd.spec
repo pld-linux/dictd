@@ -1,12 +1,12 @@
 Summary:	Dictionary database server
 Summary(pl):	Serwer bazy s³owników
 Name:		dictd
-Version:	1.10.2
-Release:	3
+Version:	1.10.4
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/dict/%{name}-%{version}.tar.gz
-# Source0-md5:	5bafbdb3adfcfcc3d82fb219a8f50595
+# Source0-md5:	1c0b7583e6fa25fd27fca5fca9ddb91f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-opt.patch
@@ -19,12 +19,13 @@ BuildRequires:	flex
 BuildRequires:	judy-devel
 BuildRequires:	libdbi-devel
 BuildRequires:	perl-base
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
-Requires:	/sbin/chkconfig
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		specflags_ia32	 -fomit-frame-pointer 
+%define		specflags_ia32	 -fomit-frame-pointer
 
 %description
 Server for the Dictionary Server Protocol (DICT), a TCP transaction
@@ -173,27 +174,21 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsys/%{name} ]; then
-	/etc/rc.d/init.d/%{name} restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
-fi
+%service dictd restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/%{name} ]; then
-		/etc/rc.d/init.d/%{name} stop >&2
-	fi
+	%service dictd stop
 	/sbin/chkconfig --del %{name}
 fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCE NEWS README* TODO dictd.conf example* security.txt
+%doc ANNOUNCE NEWS README* TODO examples/dictd* security.txt
 %ghost %{_sysconfdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
-%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/%{name}/%{name}-main.conf
-%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/%{name}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}-main.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
 %dir %{_datadir}/%{name}
@@ -214,7 +209,7 @@ fi
 
 %files -n dict
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dict.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dict.conf
 %attr(755,root,root) %{_bindir}/colorit
 %attr(755,root,root) %{_bindir}/dict
 %attr(755,root,root) %{_bindir}/dictl
