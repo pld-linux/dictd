@@ -1,29 +1,32 @@
 Summary:	Dictionary database server
 Summary(pl.UTF-8):	Serwer bazy słowników
 Name:		dictd
-Version:	1.10.4
-Release:	2
-License:	GPL
+Version:	1.11.2
+Release:	1
+License:	GPL v1+
 Group:		Networking/Daemons
-Source0:	http://dl.sourceforge.net/dict/%{name}-%{version}.tar.gz
-# Source0-md5:	1c0b7583e6fa25fd27fca5fca9ddb91f
+Source0:	http://downloads.sourceforge.net/dict/%{name}-%{version}.tar.gz
+# Source0-md5:	7008ec3bb0001c302ce751580f9d2ea4
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-opt.patch
-Patch1:		%{name}-umask.patch
+Patch0:		%{name}-umask.patch
 URL:		http://www.dict.org/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	judy-devel
 BuildRequires:	libdbi-devel
+BuildRequires:	libmaa-devel
 BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# plugins dir
+%define		_libexecdir	%{_libdir}/dictd
 
 %define		specflags_ia32	 -fomit-frame-pointer
 
@@ -51,25 +54,25 @@ Package for dictd plugins development.
 Pakiet programistyczny do tworzenia wtyczek dictd.
 
 %package plugin-dbi
-Summary:	DBI plygin for dictd server
+Summary:	DBI plugin for dictd server
 Summary(pl.UTF-8):	Wtyczka DBI dla serwera dictd
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-dbi
-DBI plygin for dictd server.
+DBI plugin for dictd server.
 
 %description plugin-dbi -l pl.UTF-8
 Wtyczka DBI dla serwera dictd.
 
 %package plugin-judy
-Summary:	Judy plygin for dictd server
+Summary:	Judy plugin for dictd server
 Summary(pl.UTF-8):	Wtyczka Judy dla serwera dictd
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-judy
-Judy plygin for dictd server.
+Judy plugin for dictd server.
 
 %description plugin-judy -l pl.UTF-8
 Wtyczka Judy dla serwera dictd.
@@ -131,28 +134,22 @@ dane do pseudo-swobodnego dostępu do pliku.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-
-# broken test if >1 plugins
-%{__perl} -pi -e 's/test \$\(PLUGINS\)/test "\$\(PLUGINS\)"/' Makefile.in
 
 %build
 cp -f /usr/share/automake/config.* .
 %{__aclocal}
 %{__autoconf}
-cd libmaa
-cp -f /usr/share/automake/config.* .
-%{__aclocal}
-%{__autoconf}
-cd ..
 CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
-%configure
+%configure \
+	--with-plugin-dbi \
+	--with-plugin-judy \
+	--with-system-utf8-funcs
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,%{name}},%{_datadir}/%{name}}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_sysconfdir}/%{name},%{_datadir}/%{name}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -165,6 +162,8 @@ install dictd-main.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 :> $RPM_BUILD_ROOT%{_sysconfdir}/%{name}.conf
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+
+%{__rm} $RPM_BUILD_ROOT%{_libexecdir}/dictdplugin_*.{la,a}
 
 mv -f doc/security.doc security.txt
 
@@ -183,7 +182,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCE NEWS README* TODO examples/dictd* security.txt
+%doc ANNOUNCE ChangeLog NEWS README TODO examples/dictd* security.txt
 %ghost %{_sysconfdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}-main.conf
@@ -191,7 +190,8 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
 %dir %{_datadir}/%{name}
-%{_mandir}/man8/%{name}*
+%dir %{_libexecdir}
+%{_mandir}/man8/dictd.8*
 
 %files devel
 %defattr(644,root,root,755)
@@ -200,11 +200,11 @@ fi
 
 %files plugin-dbi
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/dictdplugin_dbi.so
+%attr(755,root,root) %{_libexecdir}/dictdplugin_dbi.so*
 
 %files plugin-judy
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/dictdplugin_judy.so
+%attr(755,root,root) %{_libexecdir}/dictdplugin_judy.so*
 
 %files -n dict
 %defattr(644,root,root,755)
