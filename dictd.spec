@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl.UTF-8):	Serwer bazy słowników
 Name:		dictd
 Version:	1.11.2
-Release:	2
+Release:	3
 License:	GPL v1+
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/dict/%{name}-%{version}.tar.gz
@@ -25,7 +25,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		skip_post_check_so	dictdplugin_judy.so.0.0.0
+%define		skip_post_check_so	dictdplugin_judy.so.*
 
 # plugins dir
 %define		_libexecdir	%{_libdir}/dictd
