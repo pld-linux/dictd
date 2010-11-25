@@ -25,6 +25,8 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		skip_post_check_so	dictdplugin_judy.so.0.0.0
+
 # plugins dir
 %define		_libexecdir	%{_libdir}/dictd
 
