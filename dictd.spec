@@ -1,12 +1,12 @@
 Summary:	Dictionary database server
 Summary(pl.UTF-8):	Serwer bazy słowników
 Name:		dictd
-Version:	1.11.2
-Release:	3
+Version:	1.12.0
+Release:	1
 License:	GPL v1+
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/dict/%{name}-%{version}.tar.gz
-# Source0-md5:	7008ec3bb0001c302ce751580f9d2ea4
+# Source0-md5:	71aaf3a697ea2e9409643f11ea85b53a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-umask.patch
@@ -214,9 +214,11 @@ fi
 %attr(755,root,root) %{_bindir}/colorit
 %attr(755,root,root) %{_bindir}/dict
 %attr(755,root,root) %{_bindir}/dictl
+%attr(755,root,root) %{_bindir}/dict_lookup
 %{_mandir}/man1/colorit.1*
 %{_mandir}/man1/dict.1*
 %{_mandir}/man1/dictl.1*
+%{_mandir}/man1/dict_lookup.1*
 
 %files -n dictfmt
 %defattr(644,root,root,755)
