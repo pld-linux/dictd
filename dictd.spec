@@ -2,7 +2,7 @@ Summary:	Dictionary database server
 Summary(pl.UTF-8):	Serwer bazy słowników
 Name:		dictd
 Version:	1.12.1
-Release:	1
+Release:	2
 License:	GPL v1+
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/dict/%{name}-%{version}.tar.gz
