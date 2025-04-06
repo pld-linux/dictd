@@ -1,0 +1,27 @@
+--- dictd-1.13.3/Makefile.in.orig	2024-11-16 17:43:58.000000000 +0100
++++ dictd-1.13.3/Makefile.in	2025-04-06 12:57:54.126921146 +0200
+@@ -146,21 +146,21 @@ dictdplugin_man.la : data.o str.o heap.o
+ 	$(LIBTOOL) --tag=CC --mode=link $(CC) -o $@ -module \
+ 		$(^:.o=.lo) \
+ 		-rpath "${PLUGIN_DIR}" \
+-		$(LDFLAGS) ${LIBS}
++		$(LDFLAGS) ${LIBS} -lz
+ 
+ dictdplugin_judy.la : data.o str.o heap.o dictdplugin_judy.o \
+                       plugins_common.o $(LIBOBJS)
+ 	$(LIBTOOL) --tag=CC --mode=link $(CC) -o $@ -module \
+ 		$(^:.o=.lo) \
+ 		-rpath "${PLUGIN_DIR}" \
+-		$(LDFLAGS) -lJudy ${LIBS}
++		$(LDFLAGS) -lJudy ${LIBS} -lz
+ 
+ dictdplugin_dbi.la : heap.o dictdplugin_dbi.o str.o \
+                      plugins_common.o $(LIBOBJS)
+ 	$(LIBTOOL) --tag=CC --mode=link $(CC) -o $@ -module \
+ 		$(^:.o=.lo) \
+ 		-rpath "${PLUGIN_DIR}" \
+-		$(LDFLAGS) -ldbi ${LIBS}
++		$(LDFLAGS) -ldbi ${LIBS} -lz
+ 
+ .PHONY: plugins
+ plugins: $(PLUGINS)

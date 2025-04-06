@@ -1,16 +1,17 @@
 Summary:	Dictionary database server
 Summary(pl.UTF-8):	Serwer bazy słowników
 Name:		dictd
-Version:	1.12.1
-Release:	2
+Version:	1.13.3
+Release:	1
 License:	GPL v1+
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/dict/%{name}-%{version}.tar.gz
-# Source0-md5:	62696491174c22079f664830d07c0623
+# Source0-md5:	bb2f50bcf6d0a34b745d40649a4c0840
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-umask.patch
-URL:		http://www.dict.org/
+Patch1:		%{name}-link.patch
+URL:		http://dict.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	bison
@@ -27,8 +28,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		skip_post_check_so	dictdplugin_judy.so.*
 
-# plugins dir
-%define		_libexecdir	%{_libdir}/dictd
+# plugins dir: shared modules, so use private dir in %{_libdir}, not %{_libexecdir}
+%define		pkglibdir	%{_libdir}/dictd
 
 %define		specflags_ia32	 -fomit-frame-pointer
 
@@ -136,6 +137,7 @@ dane do pseudo-swobodnego dostępu do pliku.
 %prep
 %setup -q
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 cp -f /usr/share/automake/config.* .
@@ -143,9 +145,9 @@ cp -f /usr/share/automake/config.* .
 %{__autoconf}
 CFLAGS="%{rpmcflags} -DUID_NOBODY=99 -DGID_NOBODY=99"
 %configure \
+	--libexecdir=%{pkglibdir} \
 	--with-plugin-dbi \
-	--with-plugin-judy \
-	--with-system-utf8-funcs
+	--with-plugin-judy
 
 %{__make}
 
@@ -165,9 +167,9 @@ install dictd-main.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
-%{__rm} $RPM_BUILD_ROOT%{_libexecdir}/dictdplugin_*.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{pkglibdir}/dictdplugin_*.{la,a}
 
-mv -f doc/security.doc security.txt
+%{__mv} doc/security.doc security.txt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -184,15 +186,15 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCE ChangeLog NEWS README TODO examples/dictd* security.txt
+%doc ANNOUNCE NEWS README TODO examples/dictd*.conf security.txt
 %ghost %{_sysconfdir}/%{name}.conf
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}-main.conf
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
-%attr(755,root,root) %{_sbindir}/%{name}
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/dictd
+%attr(754,root,root) /etc/rc.d/init.d/dictd
+%attr(755,root,root) %{_sbindir}/dictd
 %dir %{_datadir}/%{name}
-%dir %{_libexecdir}
+%dir %{pkglibdir}
 %{_mandir}/man8/dictd.8*
 
 %files devel
@@ -202,11 +204,11 @@ fi
 
 %files plugin-dbi
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libexecdir}/dictdplugin_dbi.so*
+%attr(755,root,root) %{pkglibdir}/dictdplugin_dbi.so*
 
 %files plugin-judy
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libexecdir}/dictdplugin_judy.so*
+%attr(755,root,root) %{pkglibdir}/dictdplugin_judy.so*
 
 %files -n dict
 %defattr(644,root,root,755)
